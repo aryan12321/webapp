@@ -1,4 +1,23 @@
-const PROXY_URL = 'https://corsproxy.io/?';
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Diary App (Connected to Google Sheet)</title>
+  <style>
+    body { font-family: sans-serif; max-width: 600px; margin: 20px auto; }
+    input, textarea { width: 100%; margin-bottom: 10px; padding: 8px; border-radius: 4px; border: 1px solid #ccc; }
+    button { padding: 10px 16px; background: teal; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    #status { margin-top: 10px; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h2>📔 My Diary (Google Sheets)</h2>
+  <input type="text" id="title" placeholder="Title...">
+  <textarea id="content" placeholder="Write your diary entry here..."></textarea>
+  <button onclick="saveEntry()">Save Entry</button>
+  <p id="status"></p>
+
+  <script>
+    const PROXY_URL = 'https://corsproxy.io/?';
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyGl53JqWXfLi2gacp8Cw78nE9MePMSyvr9fe385YCrzsybjHpC5I1CqcvWunAKiko8/exec';
 
 function saveEntry() {
@@ -23,3 +42,8 @@ function saveEntry() {
       console.error(err);
     });
 }
+
+  </script>
+</body>
+</html>
+
