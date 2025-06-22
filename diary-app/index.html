@@ -10,16 +10,14 @@
   </style>
 </head>
 <body>
-
   <h2>📔 My Diary (Google Sheets)</h2>
   <input type="text" id="title" placeholder="Title...">
   <textarea id="content" placeholder="Write your diary entry here..."></textarea>
   <button onclick="saveEntry()">Save Entry</button>
-
   <p id="status"></p>
 
   <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyGl53JqWXfLi2gacp8Cw78nE9MePMSyvr9fe385YCrzsybjHpC5I1CqcvWunAKiko8/exec' // <<< USE YOUR WORKING URL HERE
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyGl53JqWXfLi2gacp8Cw78nE9MePMSyvr9fe385YCrzsybjHpC5I1CqcvWunAKiko8/exec';
 
     function saveEntry() {
       const title = encodeURIComponent(document.getElementById('title').value.trim());
@@ -31,19 +29,21 @@
 
       const fullURL = `${SCRIPT_URL}?title=${title}&text=${text}`;
 
-      fetch(fullURL)
-        .then(res => res.text())
-        .then(response => {
-          document.getElementById('status').innerText = "✅ Saved to Google Sheet!";
+      fetch(fullURL, {
+        method: 'GET',
+        mode: 'no-cors' // Use 'no-cors' to bypass CORS restrictions
+      })
+        .then(res => {
+          // With 'no-cors', response is opaque, so we can't read the body
+          document.getElementById('status').innerText = "✅ Entry sent (check Google Sheet)";
           document.getElementById('title').value = '';
           document.getElementById('content').value = '';
         })
         .catch(err => {
-          document.getElementById('status').innerText = "❌ Error saving entry";
+          document.getElementById('status').innerText = "❌ Error saving entry: " + err.message;
           console.error(err);
         });
     }
   </script>
-
 </body>
 </html>
