@@ -1,54 +1,49 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Diary with Google Sheets</title>
+  <title>Diary App (Connected to Google Sheet)</title>
   <style>
     body { font-family: sans-serif; max-width: 600px; margin: 20px auto; }
-    input, textarea { width: 100%; margin-bottom: 10px; padding: 8px; }
-    button { padding: 10px; background: teal; color: white; border: none; }
+    input, textarea { width: 100%; margin-bottom: 10px; padding: 8px; border-radius: 4px; border: 1px solid #ccc; }
+    button { padding: 10px 16px; background: teal; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    #status { margin-top: 10px; font-weight: bold; }
   </style>
 </head>
 <body>
 
-  <h2>📔 My Diary (Cloud)</h2>
+  <h2>📔 My Diary (Google Sheets)</h2>
   <input type="text" id="title" placeholder="Title...">
-  <textarea id="content" placeholder="Write your diary..."></textarea>
+  <textarea id="content" placeholder="Write your diary entry here..."></textarea>
   <button onclick="saveEntry()">Save Entry</button>
 
   <p id="status"></p>
 
   <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx21iRt4YgVMXL75zwQXGhfyPv914ZRwIC61H_Qhps1wiQO5QLcM0RZgvHpeaOZwIsW/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec'; // <<< USE YOUR WORKING URL HERE
 
     function saveEntry() {
-      const title = document.getElementById('title').value.trim();
-      const text = document.getElementById('content').value.trim();
+      const title = encodeURIComponent(document.getElementById('title').value.trim());
+      const text = encodeURIComponent(document.getElementById('content').value.trim());
       if (!title || !text) {
         alert("Please enter title and text!");
         return;
       }
 
-      const formData = new URLSearchParams();
-      formData.append("title", title);
-      formData.append("text", text);
+      const fullURL = `${SCRIPT_URL}?title=${title}&text=${text}`;
 
-      fetch(SCRIPT_URL, {
-        method: 'POST',
-        body: formData
-      })
-      .then(res => res.text())
-      .then(response => {
-        document.getElementById('status').innerText = "Saved to Google Sheet ✅";
-        document.getElementById('title').value = '';
-        document.getElementById('content').value = '';
-      })
-      .catch(err => {
-        document.getElementById('status').innerText = "Error ❌";
-        console.error(err);
-      });
+      fetch(fullURL)
+        .then(res => res.text())
+        .then(response => {
+          document.getElementById('status').innerText = "✅ Saved to Google Sheet!";
+          document.getElementById('title').value = '';
+          document.getElementById('content').value = '';
+        })
+        .catch(err => {
+          document.getElementById('status').innerText = "❌ Error saving entry.";
+          console.error(err);
+        });
     }
   </script>
 
 </body>
 </html>
-
