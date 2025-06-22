@@ -6,44 +6,18 @@
     body { font-family: sans-serif; max-width: 600px; margin: 20px auto; }
     input, textarea { width: 100%; margin-bottom: 10px; padding: 8px; border-radius: 4px; border: 1px solid #ccc; }
     button { padding: 10px 16px; background: teal; color: white; border: none; border-radius: 4px; cursor: pointer; }
-    #status { margin-top: 10px; font-weight: bold; }
   </style>
 </head>
 <body>
   <h2>📔 My Diary (Google Sheets)</h2>
-  <input type="text" id="title" placeholder="Title...">
-  <textarea id="content" placeholder="Write your diary entry here..."></textarea>
-  <button onclick="saveEntry()">Save Entry</button>
-  <p id="status"></p>
 
-  <script>
-    const PROXY_URL = 'https://corsproxy.io/?';
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyGl53JqWXfLi2gacp8Cw78nE9MePMSyvr9fe385YCrzsybjHpC5I1CqcvWunAKiko8/exec';
+  <form action="YOUR_GOOGLE_SCRIPT_URL_HERE" method="POST" target="dummyframe">
+    <input type="text" name="title" placeholder="Title..." required>
+    <textarea name="text" placeholder="Write your diary entry here..." required></textarea>
+    <button type="submit">Save Entry</button>
+  </form>
 
-function saveEntry() {
-  const title = encodeURIComponent(document.getElementById('title').value.trim());
-  const text = encodeURIComponent(document.getElementById('content').value.trim());
-  if (!title || !text) {
-    alert("Please enter title and text!");
-    return;
-  }
-
-  const fullURL = `${PROXY_URL}${SCRIPT_URL}?title=${title}&text=${text}`;
-
-  fetch(fullURL)
-    .then(res => res.json())
-    .then(response => {
-      document.getElementById('status').innerText = "✅ " + response.message;
-      document.getElementById('title').value = '';
-      document.getElementById('content').value = '';
-    })
-    .catch(err => {
-      document.getElementById('status').innerText = "❌ Error saving entry: " + err.message;
-      console.error(err);
-    });
-}
-
-  </script>
+  <iframe name="dummyframe" style="display:none;"></iframe>
+  <p>✅ Entry will be saved to your Google Sheet.</p>
 </body>
 </html>
-
